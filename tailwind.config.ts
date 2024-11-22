@@ -8,10 +8,12 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
+      fontFamily: {
+        Poppins: ["Poppins", "sans-serif"],
+        Titillium: ['"Titillium Web"', 'sans-serif'],
+        josefin: ['"Josefin Sans"', 'sans-serif'],
+        monoko: ["Source Code Pro", 'monospace']
+      }
     },
   },
   plugins: [],
