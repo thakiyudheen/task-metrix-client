@@ -1,14 +1,16 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import { signIn, useSession } from "next-auth/react";
 import { FaGoogle } from "react-icons/fa";
 import "../../app/globals.css";
-import { InputField } from "@/components/common/inputField";
+import { InputField } from "@/components/common/inputField/inputField";
 import validationSchema from "@/lib/validation/loginSchema";
-import { useAppDispatch } from "@/hooks/hooke";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooke";
 import { loginAction } from "@/store/actions/auth/loginAction";
 import { useRouter } from 'next/router';
+import { RootState } from "@/store";
+import { getUserAction } from "@/store/actions/auth/getUserAction";
 
 
 
@@ -25,6 +27,16 @@ const Login: React.FC = () => {
 const router = useRouter()
   const [error, setError] = useState<boolean>(false)
   const dispatch = useAppDispatch()
+  const {data} = useAppSelector((state:RootState)=>state.user)
+
+
+
+ 
+  useEffect(()=>{
+      if(data&&data.username){
+        router.push('/')
+      }
+  },[data,router])
 
 
   const handleSubmit = async (values: LoginFormValues) => {

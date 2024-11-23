@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import { FaGoogle } from "react-icons/fa";
 import "../../app/globals.css";
-import { InputField } from "@/components/common/inputField";
+import { InputField } from "@/components/common/inputField/inputField";
 import { signIn } from "next-auth/react";
 import validationSchema from "@/lib/validation/signupSchema";
-import { useAppDispatch } from "@/hooks/hooke";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooke";
 import { signupAction } from "@/store/actions/auth/signupAction";
 import { isUserExist } from "@/store/actions/auth/userExistOauth";
 import { useRouter } from "next/router";
+import { RootState } from "@/store";
 
 
 
@@ -30,6 +31,15 @@ const Signup: React.FC = () => {
 
   const [error, setError] = useState<boolean>(false)
   const dispatch = useAppDispatch()
+  const router = useRouter()
+  const {data} = useAppSelector((state:RootState)=>state.user)
+  
+  useEffect(()=>{
+      if(data&&data.username){
+        router.push('/')
+      }
+  },[data,router])
+
 
   const handleSubmit = async (values: SignupFormValues) => {
     try {
@@ -51,7 +61,6 @@ const Signup: React.FC = () => {
         setError(true);
     }
 };
-  const router = useRouter()
   const handleGoogleSignup = async () => {
     const res = await signIn("google", { callbackUrl: '/' });
 

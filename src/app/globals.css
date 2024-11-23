@@ -59,7 +59,7 @@ body {
 }
 
 .react-calendar__tile--now {
-  background: #a31cf1 !important;
+  background: blue !important;
   color: white !important;
   border-radius: 10px;
 }
