@@ -27,8 +27,8 @@ const Pagination: React.FC<PaginationProps> = ({
   // Determine the page buttons to display
   const getPageNumbers = () => {
     const pages = [];
-    const startPage = Math.max(1, currentPage - 1); // Show 1 page before the current page
-    const endPage = Math.min(totalPages, currentPage + 1); // Show 1 page after the current page
+    const startPage = Math.max(1, currentPage - 1); 
+    const endPage = Math.min(totalPages, currentPage + 1); 
 
     for (let i = startPage; i <= endPage; i++) {
       pages.push(i);
@@ -41,7 +41,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="flex justify-center mt-4">
-      {/* Previous Button */}
+     
       <button
         className={`px-4 py-2 mr-2 flex justify-center items-center ${
           currentPage === 1 ? "text-gray-300" : "text-black"
@@ -53,14 +53,13 @@ const Pagination: React.FC<PaginationProps> = ({
         <FaAngleDoubleLeft />
       </button>
 
-      {/* Page Number Buttons */}
       <div className="flex space-x-2">
         {pageNumbers.map((page) => (
           <button
             key={page}
             className={`py-1 px-3 rounded-lg text-sm ${
               page === currentPage
-                ? "bg-[blue] text-white"
+                ? "bg-gradient-to-l from-blue-500 to-blue-700 text-white"
                 : "bg-gray-200 text-black"
             }`}
             onClick={() => onPageChange(page)}

@@ -3,6 +3,7 @@ import { signupAction } from "../actions/auth/signupAction";
 import { loginAction } from "../actions/auth/loginAction";
 import { getUserAction } from "../actions/auth/getUserAction";
 import { logoutAction } from "../actions/auth/logoutAction";
+import { googleAuthAction } from "../actions/auth/googleAuthAction";
 
 
 export interface UserState {
@@ -86,6 +87,23 @@ const userSlice = createSlice({
             state.error = null;
         })
         .addCase(getUserAction.rejected,(state : UserState , action:PayloadAction<any> ) =>{
+            state.loading = true ; 
+            state.data =null ;
+            state.error = 'get user filed';
+        })
+        // google auth ---------------------------------------
+        .addCase(googleAuthAction.pending , (state : UserState) =>{
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(googleAuthAction.fulfilled , (state : UserState , action : PayloadAction<any>) =>{
+            console.log('store',action.payload);
+            
+            state.loading = false;
+            state.data = action.payload.data;
+            state.error = null;
+        })
+        .addCase(googleAuthAction.rejected,(state : UserState , action:PayloadAction<any> ) =>{
             state.loading = true ; 
             state.data =null ;
             state.error = 'get user filed';

@@ -66,7 +66,7 @@ export const googleSignupAction =  async ( data : any) => {
 
             if(response.data.success) {
 
-                return response.data ;
+                return {data:response.data,success:true,token:response.data.token} ;
 
             } else {
                 return false

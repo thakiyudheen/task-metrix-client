@@ -22,7 +22,7 @@ export const loginAction = createAsyncThunk(
             console.log('loginres',response);
             
             if(response.data.success) {
-
+                localStorage.setItem('jwtToken',response.data.token)
                 return response.data ;
 
             } else {

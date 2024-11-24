@@ -6,7 +6,7 @@ const CustomCalendar: React.FC = () => {
   const [value, setValue] = useState<any>(new Date());
 
   return (
-    <div className="bg-white shadow-sm rounded-lg p-4">
+    <div className="bg-white shadow-sm rounded-lg p-4 md:block hidden">
       <Calendar
         onChange={setValue}
         value={value}

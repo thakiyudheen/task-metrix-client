@@ -8,8 +8,9 @@ export const isUserExist =async (email:string) =>{
         const response = await api_client.get(`api/isExistUser/${email}`,
         config
         )
-        if(response.data.success) {
-            return true ;
+        
+        if(response.data.success){
+            return {success:true,token:response.data.token};
         } else {
             return false
         }

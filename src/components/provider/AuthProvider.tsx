@@ -17,7 +17,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (!data) {
         const fetchUser = async () => {
             try {
-              await dispatch(getUserAction());
+               dispatch(getUserAction());
             } finally {
               setLoading(false);
             }

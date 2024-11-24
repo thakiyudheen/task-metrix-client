@@ -4,7 +4,7 @@ import TaskModal from "../task/addTaskModal";
 import { getTaskDateMessage } from "@/helper/getDate";
 import { formatDateForInput } from "@/helper/formatDate";
 import { CiMenuKebab } from "react-icons/ci";
-
+import { SiTicktick } from "react-icons/si";
 
 interface Task {
   _id: string;
@@ -74,10 +74,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
           <div
             tabIndex={0}
             role="button"
-            className="m-1 cursor-pointer"
+            className="m-1 cursor-pointer flex justify-evenly items-start"
             onClick={toggleDropdown}
           >
-            <CiMenuKebab />
+            {task.completionStatus&&<SiTicktick className="mr-2 text-sm text-[green]"/>}
+            <CiMenuKebab className="ml-2 text-sm" />
           </div>
 
           {isDropdownOpen && (
@@ -98,12 +99,12 @@ const TaskCard: React.FC<TaskCardProps> = ({
                   <small>Mark Complete</small> 
                 </li>
               )}
-              <li
+              {!task.completionStatus&&<li
                 className="px-4 py-2 text-blue-500 hover:bg-gray-100 cursor-pointer"
                 onClick={openEditModal}
               >
                 <small>Edit</small>
-              </li>
+              </li>}
               <li
                 className="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer"
                 onClick={() => {
