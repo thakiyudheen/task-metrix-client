@@ -41,12 +41,12 @@ const Signup: React.FC = () => {
   const [isLoading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    // if(data&&data.username){
-    //   router.push('/')
-    // }
-    if (localStorage.getItem('jwtToken')) {
+    if(data&&data.username){
       router.push('/')
     }
+    // if (localStorage.getItem('jwtToken')) {
+    //   router.push('/')
+    // }
   }, [data, router])
 
 
@@ -176,7 +176,7 @@ const Signup: React.FC = () => {
         </div>
         <button
 
-          className="flex items-center justify-center mt-4 w-full border text-blue-700 border-blue-700 hover:text-white  rounded-md text-sm text-blue-700 hover:bg-blue-600 hover:text-white transition"
+          className="flex items-center justify-center mt-4 w-full border  hover:text-white  rounded-md text-sm  hover:text-white transition"
         >
           {/* <FaGoogle className="mr-2 text-blue-700 hover:text-white" /> Sign Up with Google */}
           <GoogleLogin

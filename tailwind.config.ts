@@ -9,7 +9,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        Poppins: ["Poppins", "sans-serif"],
+        poppins: ['var(--font-poppins)', 'sans-serif'],
         Titillium: ['"Titillium Web"', 'sans-serif'],
         josefin: ['"Josefin Sans"', 'sans-serif'],
         monoko: ["Source Code Pro", 'monospace']

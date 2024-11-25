@@ -38,12 +38,12 @@ const Login: React.FC = () => {
 
 
   useEffect(() => {
-    // if(data&&data.username){
-    //   router.push('/')
-    // }
-    if (localStorage.getItem('jwtToken')) {
+    if(data&&data.username){
       router.push('/')
     }
+    // if (localStorage.getItem('jwtToken')) {
+    //   router.push('/')
+    // }
   }, [data, router])
 
 
@@ -142,7 +142,7 @@ const Login: React.FC = () => {
           <hr className="w-1/4 border-t border-gray-300" />
         </div>
         <button
-          className="flex items-center justify-center mt-4 w-full border border-blue-700 text-blue-700 text-white  rounded-md text-sm text-blue-700 hover:bg-blue-600 hover:text-white transition"
+          className="flex items-center justify-center mt-4 w-full border   text-white  rounded-md text-sm text-blue-700  hover:text-white transition"
         >
           {/* <FaGoogle className="mr-2 text-blue-700 hover:text-white" /> Log In with Google */}
           <GoogleLogin

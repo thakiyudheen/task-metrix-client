@@ -4,7 +4,7 @@ import { RootState } from '@/store';
 import { IoMdLogOut } from "react-icons/io";
 import { useRouter } from 'next/router';
 import { BsClipboardData } from "react-icons/bs";
-import AddTaskModal from '../components/task/addTaskModal'; 
+import AddTaskModal from '../components/task/addTaskModal';
 import TaskCard from '../components/Dashbord/TaskCard';
 import Calendar from '../components/Dashbord/Calendar';
 import '../app/globals.css';
@@ -19,8 +19,9 @@ import Pagination from '@/components/common/pagination/pagination';
 import TaskSummaryCard from '@/components/Dashbord/taskSummaryCard';
 import { MdOutlinePendingActions } from "react-icons/md";
 import { PiGraphBold } from "react-icons/pi";
-import { signOut } from 'next-auth/react';
 import LoadingIndicator from '@/components/common/loding/loadingIndicator';
+import { MdOutlineHourglassEmpty } from "react-icons/md";
+import NoTasksComponent from '@/components/Dashbord/noTasks';
 
 interface Task {
   _id: string;
@@ -37,7 +38,9 @@ const Dashboard = () => {
   const [isLogout, setLogout] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [isLoading,setLoading] = useState<boolean>(false)
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const [taskCount, setTaksCount] = useState<number>(0)
+  const [completedTasks, setCompletedTasks] = useState<number>(0)
   const tasksPerPage = 3;
 
   const dispatch = useAppDispatch();
@@ -45,7 +48,7 @@ const Dashboard = () => {
   const router = useRouter();
 
   const handleFilterChange = (status: 'completed' | 'in-progress' | 'all') => {
-      setFilter((prevFilter) => (prevFilter === status ? 'all' : status));
+    setFilter((prevFilter) => (prevFilter === status ? 'all' : status));
   };
 
   const getPaginatedTasks = (taskList: Task[]) => {
@@ -56,36 +59,52 @@ const Dashboard = () => {
 
   const handleUpdate = async (updatedTask: Task) => {
     try {
+      console.log('thsi si working ',updatedTask);
+      
+      
       setLoading(true)
       await dispatch(updateTaskAction(updatedTask));
+      if(updatedTask.completionStatus){
+        setCompletedTasks((pre)=>pre+1)
+      }
       setTasks((prevTasks) =>
         prevTasks.map((task: Task) =>
           task._id === updatedTask._id ? updatedTask : task
-    )
-  );
-  setLoading(false)
-} catch (error: any) {
+        )
+      );
+      setFilteredTasks((prevTasks) =>
+        prevTasks.map((task: Task) =>
+          task._id === updatedTask._id ? updatedTask : task
+        )
+      );
+      setLoading(false)
+    } catch (error: any) {
       setLoading(false)
       console.log(error);
     }
   };
-  
+
   const handleLogout = async () => {
-    
+
     setLoading(true)
-    // await signOut({ redirect: false });
-    
     await dispatch(logoutAction());
-    setTimeout(()=>{
+    setTimeout(() => {
       setLoading(false)
-    },2000)
+    }, 2000)
   };
 
   const handleDelete = async (taskId: string) => {
     try {
       setLoading(true)
+      filteredTasks.forEach((el:Task)=>{
+        if(el._id==taskId&&el.completionStatus){
+          setCompletedTasks((pre)=>pre-1)
+        }
+      })
+      setTaksCount((pre)=>pre-1)
       await dispatch(deleteTaskAction({ _id: taskId }));
       setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+      setFilteredTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
       setLoading(false)
     } catch (error: any) {
       setLoading(false)
@@ -94,12 +113,12 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    // if (!data) {
-    //   router.push('/auth/login');
-    // }
-    if (!localStorage.getItem('jwtToken')) {
+    if (!data) {
       router.push('/auth/login');
     }
+    // if (!localStorage.getItem('jwtToken')) {
+    //   router.push('/auth/login');
+    // }
   }, [data, router]);
 
   useEffect(() => {
@@ -110,8 +129,13 @@ const Dashboard = () => {
           getTaskAction({ userId: data?._id, page: currentPage, limit: tasksPerPage })
         );
         if (response?.payload?.success) {
+
+          console.log(response.payload.data);
+          setCompletedTasks(response.payload.data.totalCompletedTasks)
+          setTaksCount(response.payload.data.totalTasks)
           setTasks(response.payload.data.tasks);
           setTotalPages(response.payload.data.totalPages);
+          setFilteredTasks(response.payload.data.tasks)
         }
         setLoading(false)
       };
@@ -131,32 +155,36 @@ const Dashboard = () => {
 
     setFilteredTasks(getPaginatedTasks(filtered));
     setLoading(false)
-  }, [tasks, filter, currentPage]);
+  }, [filter]);
 
   const handleAddTask = async (task: { task: string; date: string; completionStatus: boolean }) => {
     setLoading(true)
     const response = await dispatch(createTaskAction({ ...task, userId: data?._id }));
-    if (response?.payload.success) {
+    console.log(response);
+
+    if (response?.payload?.success) {
+      setTaksCount((pre)=>pre+1)
       setTasks((prevTasks) => [...prevTasks, response.payload.data]);
+      setFilteredTasks((prevTasks) => [...prevTasks, response.payload.data]);
     }
     setLoading(false)
   };
 
   const totalTasks = tasks.length;
-  const completedTasks = tasks.filter((task) => task.completionStatus).length;
+  // const completedTasks = tasks.filter((task) => task.completionStatus).length;
   const inProgressTasks = tasks.filter((task) => !task.completionStatus).length;
 
 
   const taskCards = [
-    { title: "Total Tasks", count: totalTasks, icon: BsClipboardData },
+    { title: "Total Tasks", count: taskCount, icon: BsClipboardData },
     { title: "Completed Tasks", count: completedTasks, icon: PiGraphBold },
-    { title: "In-progress Tasks", count: inProgressTasks, icon: MdOutlinePendingActions },
+    { title: "In-progress Tasks", count: taskCount - completedTasks, icon: MdOutlinePendingActions },
   ];
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  
+
   const handleScroll = () => {
     if (containerRef.current) {
       const scrollLeft = containerRef.current.scrollLeft;
@@ -166,7 +194,7 @@ const Dashboard = () => {
     }
   };
 
-  
+
   const scrollToCard = (index: number) => {
     if (containerRef.current) {
       const width = containerRef.current.offsetWidth;
@@ -176,7 +204,7 @@ const Dashboard = () => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen font-Poppins">
-      {isLoading&&<LoadingIndicator/>}
+      {isLoading && <LoadingIndicator />}
       {/* Header */}
       <header className="flex justify-between md:flex-row flex-col ">
         <div className='md:order-1 order-2'>
@@ -198,11 +226,10 @@ const Dashboard = () => {
         </div>
       </header>
 
-      {/* Task Summary */}
-       {/* Task Cards Container */}
-       <div
+      {/* Task  */}
+      <div
         ref={containerRef}
-        className="md:grid grid-cols-3 gap-6 mt-6 md:overflow-x-hidden flex overflow-x-scroll snap-x snap-mandatory"
+        className="md:grid grid-cols-3 gap-6 mt-6 md:overflow-x-hidden no-scrollbar flex overflow-x-scroll snap-x snap-mandatory"
         onScroll={handleScroll}
       >
         {taskCards.map((card, index) => (
@@ -219,12 +246,11 @@ const Dashboard = () => {
 
       {/* Scroll Dots */}
       <div className="flex justify-center mt-4 space-x-2 md:hidden">
-        {Array(taskCards.length-1).fill(null).map((_, index) => (
+        {Array(taskCards.length - 1).fill(null).map((_, index) => (
           <button
             key={index}
-            className={` rounded-full ${
-              index === activeIndex ? "bg-[blue] w-6 h-2" : "w-3 h-2 bg-gray-300"
-            }`}
+            className={` rounded-full ${index === activeIndex ? "bg-[blue] w-6 h-2" : "w-3 h-2 bg-gray-300"
+              }`}
             onClick={() => scrollToCard(index)}
           />
         ))}
@@ -233,21 +259,19 @@ const Dashboard = () => {
       {/* Tasks and Calendar */}
       <div className="mt-8 flex justify-evenly">
         <div className="flex flex-col w-full">
-          <div className="flex justify-between md:items-center  md:flex-row flex-col mb-4">
+          <div className="flex justify-between md:items-center md:flex-row flex-col mb-4">
             <h2 className="text-xl font-bold text-black hidden md:block">Tasks</h2>
             <div className="flex md:space-x-2">
               <button
-                className={`px-4 py-2 ${
-                  filter === 'in-progress' ? 'bg-blue-300 text-white' : 'bg-white text-black'
-                } rounded-full text-sm`}
+                className={`px-4 py-2 ${filter === 'in-progress' ? 'bg-blue-300 text-white' : 'bg-white text-black'
+                  } rounded-full text-sm`}
                 onClick={() => handleFilterChange('in-progress')}
               >
                 In-progress
               </button>
               <button
-                className={`px-4 py-2 ${
-                  filter === 'completed' ? 'bg-blue-500 text-white' : 'bg-white text-black'
-                } rounded-full text-sm`}
+                className={`px-4 py-2 ${filter === 'completed' ? 'bg-blue-500 text-white' : 'bg-white text-black'
+                  } rounded-full text-sm`}
                 onClick={() => handleFilterChange('completed')}
               >
                 Completed
@@ -260,18 +284,24 @@ const Dashboard = () => {
                 Add Task
               </button>
             </div>
-                <h2 className="text-xl font-bold text-black md:hidden mx-2 my-3">Tasks</h2>
+            <h2 className="text-xl font-bold text-black md:hidden mx-2 my-3">Tasks</h2>
           </div>
 
-          {/* Task Cards */}
-          {filteredTasks.map((task) => (
-            <TaskCard
-              key={task._id}
-              task={task}
-              handleUpdate={handleUpdate}
-              handleDelete={handleDelete}
-            />
-          ))}
+          {/* Check if tasks are empty */}
+          {taskCount === 0 ? (
+            
+            <NoTasksComponent/>
+
+          ) : (
+            filteredTasks.map((task) => (
+              <TaskCard
+                key={task._id}
+                task={task}
+                handleUpdate={handleUpdate}
+                handleDelete={handleDelete}
+              />
+            ))
+          )}
         </div>
 
         {/* Calendar Component */}
@@ -296,11 +326,11 @@ const Dashboard = () => {
         />
       )}
 
-      <Pagination
+      {<Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={(page: number) => setCurrentPage(page)}
-      />
+      />}
     </div>
   );
 };

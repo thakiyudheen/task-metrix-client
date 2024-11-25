@@ -26,7 +26,11 @@ const TaskSummaryCard: React.FC<TaskSummaryCardProps> = ({ title, count, index, 
                     <>
                         {" \\ "}
                         <span className="text-xs">
-                            {totalTasks} ({((count / totalTasks) * 100).toFixed(1)}%)
+                            {totalTasks} (
+                            {isNaN(count / totalTasks)
+                                ? "0.00"
+                                : ((count / totalTasks) * 100).toFixed(1)}
+                            %)
                         </span>
                     </>
                 )}

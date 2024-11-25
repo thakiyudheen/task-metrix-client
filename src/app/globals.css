@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import url("https://fonts.googleapis.com/css?family=Poppins:300,400,700");
-body {
-  @apply font-Poppins;
-}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -20,9 +18,8 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), sans-serif;
 }
-
 
 
 .react-calendar {
@@ -72,4 +69,15 @@ display: none;
 section {
 -ms-overflow-style: none;
 scrollbar-width: none;
+}
+
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+
+.no-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
 }
