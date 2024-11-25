@@ -44,10 +44,10 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 Here are some screenshots from the application:
 
 ### 1. **Login Page**
-![Login Page](path/tasks-signup.png)
+![Login Page](./public/tasks-signup.png)
 
 ### 2. **Dashboard**
-![Dashboard](tasks-home.png)
+![Dashboard](./public/tasks-home.png)
 
 
 
