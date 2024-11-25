@@ -3,9 +3,10 @@ import { logoutAction } from '@/store/actions/auth/logoutAction';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 
-
+// const BASE_URL: string = process.env.NEXT_BASE_URL||'http://localhost:3001';
 const BASE_URL: string = process.env.NEXT_BASE_URL||'https://task-metrix-server.onrender.com';
-console.log(process.env.NEXT_BASE_URL);
+
+console.log();
 
 export const api_client = axios.create({
   baseURL: BASE_URL, 
