@@ -20,7 +20,6 @@ import TaskSummaryCard from '@/components/Dashbord/taskSummaryCard';
 import { MdOutlinePendingActions } from "react-icons/md";
 import { PiGraphBold } from "react-icons/pi";
 import LoadingIndicator from '@/components/common/loding/loadingIndicator';
-import { MdOutlineHourglassEmpty } from "react-icons/md";
 import NoTasksComponent from '@/components/Dashbord/noTasks';
 
 interface Task {
@@ -164,6 +163,8 @@ const Dashboard = () => {
 
     if (response?.payload?.success) {
       setTaksCount((pre)=>pre+1)
+      console.log('its updated user',response?.payload?.data);
+      
       // setTasks((prevTasks) => [...prevTasks, response.payload.data]);
       // setFilteredTasks((prevTasks) => [...prevTasks, response.payload.data]);
       setTasks(response?.payload?.data)
