@@ -85,10 +85,10 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row items-center justify-evenly bg-white">
       {isLoading && <LoadingIndicator />}
-      <div className="max-w-md w-full">
+      <div className="max-w-md w-full md:p-0 p-4">
         <img src={'/signup-metrix.svg'} alt="Login Illustration" className="w-full" />
       </div>
-      <div className="bg-white rounded-lg p-6 max-w-md w-full">
+      <div className="bg-white rounded-lg md:p-6 p-8 max-w-md w-full   ">
         <h2 className="text-2xl font-bold text-blue-600 text-center mb-6">Log In</h2>
         <Formik
           initialValues={initialValues}

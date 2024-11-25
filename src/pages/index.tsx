@@ -226,7 +226,7 @@ const Dashboard = () => {
             onClick={() => {
               setLogout(true);
             }}
-            className="bg-gradient-to-l from-gray-400 to-gray-500 py-2 mr-2 px-4 rounded-lg md:static relative left-[70%] mb-5 md:mb-0"
+            className="bg-gradient-to-l  from-gray-400 to-gray-500 py-2 mr-2 px-4 rounded-lg md:static relative left-[70%] mb-5 md:mb-0"
           >
             <small className="flex justify-between items-center">
               <IoMdLogOut className="text-sm mr-2" />
