@@ -4,7 +4,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 
 
 // const BASE_URL: string = process.env.NEXT_PUBLIC_BASE_URL ||"";
-const BASE_URL: string = process.env.NEXT_BASE_URL||'http://localhost:3001';
+const BASE_URL: string = process.env.NEXT_BASE_URL||'https://task-metrix-client.vercel.app';
 console.log(process.env.NEXT_BASE_URL);
 
 export const api_client = axios.create({
