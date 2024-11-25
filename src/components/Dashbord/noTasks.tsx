@@ -12,7 +12,7 @@ const NoTasksComponent: React.FC<NoTasksComponentProps> = ({
     <div className="group flex flex-col md:flex-row items-center w-full rounded-lg justify-evenly md:h-[90%] h-[100%] relative md:bg-white">
       <div className="flex items-center justify-center w-full md:w-1/2 h-full md:p-0 p-5">
         <img
-          src={'\time.avg'}
+          src="\time.svg"
           alt="No tasks"
           className="w-3/4 md:w-[70%] object-contain"
         />

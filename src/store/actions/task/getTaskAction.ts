@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 
 export const getTaskAction = createAsyncThunk( 
     'user/get-task',
-    async ( data:{userId:string,page:number,limit:number},{ rejectWithValue }) => {
+    async ( data:{userId:string,page:number,limit:number,completionStatus?:boolean},{ rejectWithValue }) => {
         try {
             const response = await api_client.get(`api/getTasks`,
             {params:data}

@@ -143,18 +143,29 @@ const Dashboard = () => {
   }, [dispatch, currentPage, data]);
 
   useEffect(() => {
-    setLoading(true)
-    let filtered = tasks;
-
-    if (filter === 'completed') {
-      filtered = tasks.filter((task) => task.completionStatus);
-    } else if (filter === 'in-progress') {
-      filtered = tasks.filter((task) => !task.completionStatus);
-    }
-
-    setFilteredTasks(filtered);
-    setLoading(false)
-  }, [filter,tasks,currentPage]);
+    setLoading(true);
+    
+    const getTasks = async () => {
+      
+      const response = await dispatch(
+        getTaskAction({
+          userId: data?._id || " ",
+          page: currentPage,
+          limit: tasksPerPage,
+          completionStatus: filter === 'completed' ? true : filter === 'in-progress' ? false : undefined
+        })
+      );
+      
+      
+      if (response?.payload?.success) {
+        setFilteredTasks(response?.payload?.data?.tasks);
+      }
+  
+      setLoading(false);
+    };
+  
+    getTasks();
+  }, [filter, currentPage, tasksPerPage, data?._id, dispatch]);
 
   const handleAddTask = async (task: { task: string; date: string; completionStatus: boolean }) => {
     setLoading(true)
@@ -164,9 +175,6 @@ const Dashboard = () => {
     if (response?.payload?.success) {
       setTaksCount((pre)=>pre+1)
       console.log('its updated user',response?.payload?.data);
-      
-      // setTasks((prevTasks) => [...prevTasks, response.payload.data]);
-      // setFilteredTasks((prevTasks) => [...prevTasks, response.payload.data]);
       setTasks(response?.payload?.data)
       setFilteredTasks(response?.payload?.data)
     }
@@ -174,7 +182,6 @@ const Dashboard = () => {
   };
 
   const totalTasks = tasks.length;
-  // const completedTasks = tasks.filter((task) => task.completionStatus).length;
   const inProgressTasks = tasks.filter((task) => !task.completionStatus).length;
 
 
@@ -240,7 +247,7 @@ const Dashboard = () => {
             key={index}
             title={card.title}
             count={card.count}
-            totalTasks={totalTasks}
+            totalTasks={taskCount}
             index={index}
             icon={card.icon}
           />
@@ -290,7 +297,7 @@ const Dashboard = () => {
             <h2 className="text-xl font-bold text-black md:hidden mx-2 my-3">Tasks</h2>
           </div>
 
-          {/* Check if tasks are empty */}
+        
           {taskCount === 0 ? (
             
             <NoTasksComponent/>
