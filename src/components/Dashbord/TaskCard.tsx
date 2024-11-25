@@ -44,7 +44,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     setCurrentTask(null);
   };
 
-  const saveTask = (updatedTask: Task) => {
+  const saveTask = (updatedTask: Task |any) => {
     handleUpdate(updatedTask);
     setModalOpen(false);
   };
