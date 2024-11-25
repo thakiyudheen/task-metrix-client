@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Head from "next/head";
-import { useActionState, useEffect } from "react";
-import { useAppDispatch } from "@/hooks/hooke";
-import { getUserAction } from "@/store/actions/auth/getUserAction";
-import { useRouter } from "next/router";
+
 
 
 const geistSans = localFont({
@@ -29,21 +26,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  // const router = useRouter()
-  // const dispatch = useAppDispatch()
-  // useEffect(()=>{
-  //   const getUser = async ()=>{
-  //      const response = await dispatch(getUserAction())
-  //      console.log('its from layout', response);
-       
-  //      if(response?.payload.success){
-  //       router.push('/')
-  //      }
-  //   }
-  //   getUser()
-  // },[router,dispatch])
-
 
   return (
     <html lang="en">

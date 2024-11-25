@@ -1,14 +1,25 @@
 // {
 //   "extends": ["next/core-web-vitals", "next/typescript"]
 // }
+// {
+//   "extends": [
+//     "next/core-web-vitals",
+//     "next/typescript"
+//   ],
+//   "rules": {
+//     "@typescript-eslint/no-explicit-any": "off",  // Disable rule for `any` type
+//     "no-unused-vars": "off",  // Disable rule for unused variables
+//     "react/prop-types": "off"  // Disable prop-types rule (because you're using TypeScript)
+//   }
+// }
 {
   "extends": [
-    "next/core-web-vitals",
-    "next/typescript"
+    "next/core-web-vitals", 
+    "plugin:@typescript-eslint/recommended" 
   ],
   "rules": {
-    "@typescript-eslint/no-explicit-any": "off",  // Disable rule for `any` type
-    "no-unused-vars": "off",  // Disable rule for unused variables
-    "react/prop-types": "off"  // Disable prop-types rule (because you're using TypeScript)
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "react/prop-types": "off"
   }
 }
