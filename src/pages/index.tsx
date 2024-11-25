@@ -155,7 +155,7 @@ const Dashboard = () => {
 
     setFilteredTasks(getPaginatedTasks(filtered));
     setLoading(false)
-  }, [filter]);
+  }, [filter,tasks,currentPage]);
 
   const handleAddTask = async (task: { task: string; date: string; completionStatus: boolean }) => {
     setLoading(true)
