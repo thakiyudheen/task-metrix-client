@@ -153,19 +153,21 @@ const Dashboard = () => {
       filtered = tasks.filter((task) => !task.completionStatus);
     }
 
-    setFilteredTasks(getPaginatedTasks(filtered));
+    setFilteredTasks(filtered);
     setLoading(false)
   }, [filter,tasks,currentPage]);
 
   const handleAddTask = async (task: { task: string; date: string; completionStatus: boolean }) => {
     setLoading(true)
-    const response = await dispatch(createTaskAction({ ...task, userId: data?._id }));
+    const response = await dispatch(createTaskAction({ ...task, userId: data?._id ,page:currentPage,limit:tasksPerPage},));
     console.log(response);
 
     if (response?.payload?.success) {
       setTaksCount((pre)=>pre+1)
-      setTasks((prevTasks) => [...prevTasks, response.payload.data]);
-      setFilteredTasks((prevTasks) => [...prevTasks, response.payload.data]);
+      // setTasks((prevTasks) => [...prevTasks, response.payload.data]);
+      // setFilteredTasks((prevTasks) => [...prevTasks, response.payload.data]);
+      setTasks(response?.payload?.data)
+      setFilteredTasks(response?.payload?.data)
     }
     setLoading(false)
   };
