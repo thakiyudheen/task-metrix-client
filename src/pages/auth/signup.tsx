@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
-import { FaGoogle } from "react-icons/fa";
 import "../../app/globals.css";
 import { InputField } from "@/components/common/inputField/inputField";
-import { signIn } from "next-auth/react";
 import validationSchema from "@/lib/validation/signupSchema";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooke";
 import { signupAction } from "@/store/actions/auth/signupAction";
@@ -12,7 +10,6 @@ import { useRouter } from "next/router";
 import { RootState } from "@/store";
 import { GoogleLogin } from '@react-oauth/google';
 import { googleAuthAction } from "@/store/actions/auth/googleAuthAction";
-import { IGoogleAuth } from "@/type/IgoogleAuth";
 import LoadingIndicator from "@/components/common/loding/loadingIndicator";
 
 
@@ -41,12 +38,9 @@ const Signup: React.FC = () => {
   const [isLoading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    if(data&&data.username){
+    if (data && data.username) {
       router.push('/')
     }
-    // if (localStorage.getItem('jwtToken')) {
-    //   router.push('/')
-    // }
   }, [data, router])
 
 
@@ -109,7 +103,7 @@ const Signup: React.FC = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ values, handleChange, handleBlur, errors, touched,isSubmitting }) => (
+          {({ values, handleChange, handleBlur, errors, touched, isSubmitting }) => (
             <Form>
               {error && <small className="text-[red]">Email is already exist</small>}
               {gAuthError && <small className="text-[red]">User no signup throgh google!!</small>}
@@ -158,7 +152,7 @@ const Signup: React.FC = () => {
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded-md text-sm hover:bg-blue-700 transition"
               >
-                {!isSubmitting?"Sign Up":"Sign Up..."}
+                {!isSubmitting ? "Sign Up" : "Sign Up..."}
               </button>
               <div className="mt-4 text-center text-gray-500 text-sm">
                 If you have an account,{" "}

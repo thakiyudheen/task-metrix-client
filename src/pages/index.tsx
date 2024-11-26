@@ -58,13 +58,13 @@ const Dashboard = () => {
 
   const handleUpdate = async (updatedTask: Task) => {
     try {
-      console.log('thsi si working ',updatedTask);
-      
-      
+      console.log('thsi si working ', updatedTask);
+
+
       setLoading(true)
       await dispatch(updateTaskAction(updatedTask));
-      if(updatedTask.completionStatus){
-        setCompletedTasks((pre)=>pre+1)
+      if (updatedTask.completionStatus) {
+        setCompletedTasks((pre) => pre + 1)
       }
       setTasks((prevTasks) =>
         prevTasks.map((task: Task) =>
@@ -89,18 +89,19 @@ const Dashboard = () => {
     await dispatch(logoutAction());
     setTimeout(() => {
       setLoading(false)
+      router.push('/auth/login')
     }, 2000)
   };
 
   const handleDelete = async (taskId: string) => {
     try {
       setLoading(true)
-      filteredTasks.forEach((el:Task)=>{
-        if(el._id==taskId&&el.completionStatus){
-          setCompletedTasks((pre)=>pre-1)
+      filteredTasks.forEach((el: Task) => {
+        if (el._id == taskId && el.completionStatus) {
+          setCompletedTasks((pre) => pre - 1)
         }
       })
-      setTaksCount((pre)=>pre-1)
+      setTaksCount((pre) => pre - 1)
       await dispatch(deleteTaskAction({ _id: taskId }));
       setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
       setFilteredTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
@@ -115,9 +116,6 @@ const Dashboard = () => {
     if (!data) {
       router.push('/auth/login');
     }
-    // if (!localStorage.getItem('jwtToken')) {
-    //   router.push('/auth/login');
-    // }
   }, [data, router]);
 
   useEffect(() => {
@@ -144,9 +142,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     setLoading(true);
-    
+
     const getTasks = async () => {
-      
+
       const response = await dispatch(
         getTaskAction({
           userId: data?._id || " ",
@@ -155,26 +153,26 @@ const Dashboard = () => {
           completionStatus: filter === 'completed' ? true : filter === 'in-progress' ? false : undefined
         })
       );
-      
-      
+
+
       if (response?.payload?.success) {
         setFilteredTasks(response?.payload?.data?.tasks);
       }
-  
+
       setLoading(false);
     };
-  
+
     getTasks();
   }, [filter, currentPage, tasksPerPage, data?._id, dispatch]);
 
   const handleAddTask = async (task: { task: string; date: string; completionStatus: boolean }) => {
     setLoading(true)
-    const response = await dispatch(createTaskAction({ ...task, userId: data?._id ,page:currentPage,limit:tasksPerPage},));
+    const response = await dispatch(createTaskAction({ ...task, userId: data?._id, page: currentPage, limit: tasksPerPage },));
     console.log(response);
 
     if (response?.payload?.success) {
-      setTaksCount((pre)=>pre+1)
-      console.log('its updated user',response?.payload?.data);
+      setTaksCount((pre) => pre + 1)
+      console.log('its updated user', response?.payload?.data);
       setTasks(response?.payload?.data)
       setFilteredTasks(response?.payload?.data)
     }
@@ -297,10 +295,10 @@ const Dashboard = () => {
             <h2 className="text-xl font-bold text-black md:hidden mx-2 my-3">Tasks</h2>
           </div>
 
-        
+
           {taskCount === 0 ? (
-            
-            <NoTasksComponent/>
+
+            <NoTasksComponent />
 
           ) : (
             filteredTasks.map((task) => (

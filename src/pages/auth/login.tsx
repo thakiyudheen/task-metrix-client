@@ -1,8 +1,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
-import { signIn, useSession } from "next-auth/react";
-import { FaGoogle } from "react-icons/fa";
 import "../../app/globals.css";
 import { InputField } from "@/components/common/inputField/inputField";
 import validationSchema from "@/lib/validation/loginSchema";
@@ -10,8 +8,6 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooke";
 import { loginAction } from "@/store/actions/auth/loginAction";
 import { useRouter } from 'next/router';
 import { RootState } from "@/store";
-import { getUserAction } from "@/store/actions/auth/getUserAction";
-import { IGoogleAuth } from "@/type/IgoogleAuth";
 import { GoogleLogin } from "@react-oauth/google";
 import { googleAuthAction } from "@/store/actions/auth/googleAuthAction";
 import LoadingIndicator from "@/components/common/loding/loadingIndicator";
@@ -38,40 +34,37 @@ const Login: React.FC = () => {
 
 
   useEffect(() => {
-    if(data&&data.username){
+    if (data && data.username) {
       router.push('/')
     }
-    // if (localStorage.getItem('jwtToken')) {
-    //   router.push('/')
-    // }
   }, [data, router])
 
 
   const handleSubmit = async (values: LoginFormValues) => {
     try {
       setLoading(true)
-      const response = await dispatch(loginAction(values)).unwrap();
+      const response = await dispatch(loginAction(values));
       console.log('Login success:', response);
-
-      setLoading(false)
-      router.push('/');
+      setTimeout(() => {
+        setLoading(false)
+        router.push('/');
+      }, 2000)
     } catch (error: any) {
       console.error('Login failed:', error);
-      setLoading(false)
       setError(true);
     }
   };
 
 
   const handleGoogleLogin = async (credentials: any) => {
-    // const res = await signIn("google",{redirect:false},{ callbackUrl:'/'});
     try {
       setLoading(true)
 
       const response = await dispatch(googleAuthAction(credentials))
-      setLoading(false)
-      router.push('/');
-      return;
+      setTimeout(()=>{
+        router.push('/');
+        return;
+      },2000)
 
     } catch (error: any) {
       console.log('this is error', error);
@@ -144,7 +137,6 @@ const Login: React.FC = () => {
         <button
           className="flex items-center justify-center mt-4 w-full border   text-white  rounded-md text-sm text-blue-700  hover:text-white transition"
         >
-          {/* <FaGoogle className="mr-2 text-blue-700 hover:text-white" /> Log In with Google */}
           <GoogleLogin
             onSuccess={handleGoogleLogin}
             onError={() => {

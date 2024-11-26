@@ -3,6 +3,7 @@ import { useAppDispatch } from '@/hooks/hooke';
 import { getUserAction } from '@/store/actions/auth/getUserAction'; 
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import LoadingIndicator from '../common/loding/loadingIndicator';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -17,7 +18,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (!data) {
         const fetchUser = async () => {
             try {
-               dispatch(getUserAction());
+              setLoading(true)
+             await  dispatch(getUserAction());
             } finally {
               setLoading(false);
             }
@@ -29,7 +31,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div><LoadingIndicator/></div>; 
   }
 
   return <>{children}</>;
