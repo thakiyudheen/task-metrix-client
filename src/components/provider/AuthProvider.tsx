@@ -31,7 +31,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   
   if (loading) {
-    return <div><LoadingIndicator/></div>; 
+    return <div className='bg-white' ><LoadingIndicator/></div>; 
   }
 
   return <>{children}</>;
